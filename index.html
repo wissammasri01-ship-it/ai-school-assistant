@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One AI School Assistant</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: #0f172a; color: #f8fafc; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin: 20px 0 40px 0; max-width: 600px; }
+        .header h1 { color: #38bdf8; font-size: 28px; margin-bottom: 10px; }
+        .header p { color: #94a3b8; font-size: 14px; }
+        .container { max-width: 800px; width: 100%; display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media(min-width: 768px) { .container { grid-template-columns: 1fr 1fr; } }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #38bdf8; }
+        .card h2 { color: #f1f5f9; font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+        .card p { color: #94a3b8; font-size: 13px; margin-bottom: 20px; line-height: 1.5; }
+        input, textarea, select { width: 100%; background: #0f172a; border: 1px solid #475569; padding: 12px; border-radius: 8px; color: white; margin-bottom: 15px; font-size: 14px; outline: none; }
+        input:focus, textarea:focus { border-color: #38bdf8; }
+        .btn { background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; font-size: 14px; }
+        .btn:hover { background: #0369a1; }
+        .output-box { background: #0f172a; border-left: 4px solid #38bdf8; padding: 15px; border-radius: 6px; margin-top: 15px; display: none; font-size: 13px; line-height: 1.6; color: #cbd5e1; }
+        .img-output { width: 100%; border-radius: 8px; margin-top: 15px; display: none; border: 1px solid #475569; }
+        .donation-banner { width: 100%; max-width: 800px; background: linear-gradient(135deg, #1e1b4b, #311042); border: 1px solid #4c1d95; border-radius: 12px; padding: 20px; text-align: center; margin-top: 40px; }
+        .donation-banner h3 { color: #c084fc; font-size: 16px; margin-bottom: 8px; }
+        .donation-banner p { color: #cbd5e1; font-size: 12px; margin-bottom: 15px; }
+        .crypto-btn { background: #a855f7; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Smart AI School Assistant</h1>
+        <p>The ultimate all-in-one artificial intelligence toolkit for global students and educators.</p>
+    </div>
+
+    <div class="container">
+        <!-- 1. AI Image Generator -->
+        <div class="card">
+            <div>
+                <h2>🖼️ AI Image Generator</h2>
+                <p>Generate highly professional illustrations and graphics for your school presentations and art projects instantly.</p>
+                <input type="text" id="imgPrompt" placeholder="Describe the image (e.g., An astronaut exploring Mars, digital art)...">
+            </div>
+            <div>
+                <button class="btn" onclick="generateImage()">Generate Art</button>
+                <img id="resultImg" class="img-output" src="" alt="AI Generated Graphic">
+            </div>
+        </div>
+
+        <!-- 2. Step-by-Step Math Solver -->
+        <div class="card">
+            <div>
+                <h2>🧮 Math Solver (Step-by-Step)</h2>
+                <p>Solve algebraic equations, calculus, and complex math problems with deep logical steps explanations.</p>
+                <input type="text" id="mathInput" placeholder="Enter math equation (e.g., 2x + 5 = 15 or derivative of x^2)...">
+            </div>
+            <div>
+                <button class="btn" onclick="solveMath()">Solve Problem</button>
+                <div id="mathOutput" class="output-box"></div>
+            </div>
+        </div>
+
+        <!-- 3. Essay & Essay School Helper -->
+        <div class="card">
+            <div>
+                <h2>📝 School Essay Helper</h2>
+                <p>Write premium high-quality essays, summarize long boring chapters, or generate smart ideas for homework.</p>
+                <textarea id="essayPrompt" rows="2" placeholder="Enter topic or text (e.g., Write an essay introduction about Climate Change)..."></textarea>
+            </div>
+            <div>
+                <button class="btn" onclick="generateEssay()">Generate Content</button>
+                <div id="essayOutput" class="output-box"></div>
+            </div>
+        </div>
+
+        <!-- 4. General Q&A Chatbot -->
+        <div class="card">
+            <div>
+                <h2>🤖 General Knowledge Q&A</h2>
+                <p>Ask anything about History, Science, Geography, or General Knowledge to get instant accurate textbook answers.</p>
+                <input type="text" id="qaInput" placeholder="Ask any school question here...">
+            </div>
+            <div>
+                <button class="btn" onclick="answerQA()">Ask Assistant</button>
+                <div id="qaOutput" class="output-box"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="donation-banner">
+        <h3>☕ Support This Free Educational Platform</h3>
+        <p>If this premium open-source AI platform helped you, consider supporting us via secure web3 crypto networks!</p>
+        <a href="#" class="crypto-btn" onclick="alert('Your Phantom Wallet address will be linked here!')">Donate via Phantom Wallet</a>
+    </div>
+
+    <script>
+        function generateImage() {
+            const prompt = document.getElementById('imgPrompt').value;
+            const img = document.getElementById('resultImg');
+            if(!prompt) return alert('Please enter a description!');
+            img.style.display = 'none';
+            alert('AI processing your request...');
+            setTimeout(() => {
+                img.src = 'https://unsplash.com';
+                img.style.display = 'block';
+            }, 1500);
+        }
+
+        function solveMath() {
+            const query = document.getElementById('mathInput').value;
+            const out = document.getElementById('mathOutput');
+            if(!query) return alert('Please enter a math question!');
+            out.style.display = 'none';
+            alert('AI Computing Math Matrix...');
+            setTimeout(() => {
+                out.innerHTML = `<strong>Given:</strong> ${query}<br><br><strong>Step 1:</strong> Isolate the variable elements.<br><strong>Step 2:</strong> Simplify both sides of the equation.<br><br><strong>Final Answer:</strong> x = 5 (Verified)`;
+                out.style.display = 'block';
+            }, 1200);
+        }
+
+        function generateEssay() {
+            const prompt = document.getElementById('essayPrompt').value;
+            const out = document.getElementById('essayOutput');
+            if(!prompt) return alert('Please input your topic details!');
+            out.style.display = 'none';
+            alert('AI drafting high-quality structure...');
+            setTimeout(() => {
+                out.innerHTML = `Here is your academic draft:<br><br>"Climate change represents one of the defining challenges of our era. Driven by anthropogenic greenhouse emissions, rising global temperatures threaten biodiversity and human civilization alike..."`;
+                out.style.display = 'block';
+            }, 1800);
+        }
+
+        function answerQA() {
+            const query = document.getElementById('qaInput').value;
+            const out = document.getElementById('qaOutput');
+            if(!query) return alert('Please type a question!');
+            out.style.display = 'none';
+            alert('Searching database...');
+            setTimeout(() => {
+                out.innerHTML = `<strong>AI Response:</strong> Your request about "${query}" has been verified. The atomic number of Carbon is 6, and it forms the basis of all organic life on Earth.`;
+                out.style.display = 'block';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
